@@ -53,5 +53,7 @@
     "rollup-plugin-terser": "^5.1.3",
     "tape": "^4.12.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "d3-scale": "^3.2.1"
+  }
 }
