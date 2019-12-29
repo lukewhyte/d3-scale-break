@@ -1,0 +1,4 @@
+{
+    // ensures most commonly used transpilations e.g. import
+    "presets": ["@babel/preset-env"]
+}

@@ -1,0 +1,57 @@
+{
+  "name": "d3-scale-break",
+  "version": "0.0.1",
+  "description": "Domain/range scale breaking for handling data outliers in d3",
+  "main": "dist/d3-scale-break.min.js",
+  "module": "dist/d3-scale-break.esm.js",
+  "scripts": {
+    "clean": "rimraf dist",
+    "lint": "eslint src",
+    "build": "yarn rollup -c",
+    "pretest": "yarn build && yarn lint",
+    "test": "babel-tape-runner 'tests/test__*.js' | faucet",
+    "posttest": "yarn clean",
+    "precommit": "yarn test",
+    "prepublishOnly": "yarn test && yarn build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukewhyte/d3-scale-break.git"
+  },
+  "keywords": [
+    "d3",
+    "scale",
+    "break",
+    "svg",
+    "graphics",
+    "data",
+    "visualization"
+  ],
+  "author": "Luke Whyte",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lukewhyte/d3-scale-break/issues"
+  },
+  "homepage": "https://github.com/lukewhyte/d3-scale-break#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-external-helpers": "^7.7.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "@rollup/plugin-node-resolve": "^6.0.0",
+    "babel-eslint": "^10.0.3",
+    "babel-tape-runner": "^3.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-tape": "^1.1.0",
+    "faucet": "^0.0.1",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.27.14",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-terser": "^5.1.3",
+    "tape": "^4.12.1"
+  },
+  "dependencies": {}
+}
