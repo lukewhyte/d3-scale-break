@@ -1,7 +1,12 @@
-import { scaleLinear } from "d3-scale";
+import { scaleLinear } from 'd3-scale';
+import setScaleMap from './scaleMap';
 
-const linear = (domain, range) => {
-    const mapper = mapScales(domain, range);
+const linear = (domains, range) => {
+    const scaleMap = setScaleMap(domains, range);
+    const scales = domains.map(domain => scaleLinear(
+        domain,
+        scaleMap.interpolate(domain),
+    ));
 };
 
 // We'll have a universal scaleMapper that will create an array of domain->ranges with a lookup function
@@ -10,16 +15,5 @@ const linear = (domain, range) => {
 // These new public methods will utilize the mapper to pass the value to the correct scale and vice versa.
 // We can have a separate continous.js for overwriting each scale method defined in that file, then tackle the
 // scale-specific methods in each of their dedicate modules.
-
-const linear = function linear() {
-
-    const proto = continuous();
-
-    scale.copy = () => copy(scale, linear());
-
-    initRange.apply(scale, arguments);
-
-    return linearish(scale);
-};
 
 export default linear;
