@@ -1,8 +1,8 @@
 import { scaleLinear } from 'd3-scale';
-import setScaleMap from './scaleMap';
+import { LinearScaleMap as ScaleMap } from './ScaleMap';
 
 const linear = (domains, range) => {
-    const scaleMap = setScaleMap(domains, range);
+    const scaleMap = ScaleMap(domains, range);
     const scales = domains.map(domain => scaleLinear(
         domain,
         scaleMap.interpolate(domain),
