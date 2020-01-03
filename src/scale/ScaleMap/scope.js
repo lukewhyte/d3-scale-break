@@ -9,15 +9,17 @@ export const scopeSetter = state => {
         setScopes: scopes => {
             if (scopes.length === state.domains.length) {
                 state.scopes = scopes;
+                state.notifyScopeListeners();
             } else {
                 state.scopes = [];
+                console.error('Scope.length does not match domain.length')
             }
-            state.notifyScopeListeners();
             return state.scope;
         },
         sanitizeScopes: () => {
             if (state.scopes.length !== state.domains.length ) {
                 state.scopes = [];
+                console.error('Scope.length does not match domain.length')
             }
         },
     };

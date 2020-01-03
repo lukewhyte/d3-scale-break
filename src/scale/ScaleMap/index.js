@@ -1,3 +1,4 @@
+import mapper from './map';
 import {
     domainGetter,
     domainSetter,
@@ -18,18 +19,15 @@ import {
 
 const unit = [0, 1];
 
-export const mapper = state => ({
-    mapValToIdx: val => state.domains.findIndex(([d0, d1]) => {
-        const n = state.normalize;
-        return (d1 < d0) ? (n(val) >= n(d1)) && (n(val) <= n(d0)) : (n(val) >= n(d0)) && (n(val) <= n(d1)); 
-    }),
-    mapValToRange: val => state.getScale(
-        state.mapValToIdx(val)
-    )(val),
+export const utils = state => ({
+    get unknown() { return state._unknown },
+    set unknown(name) { state._unknown = name; },
+    flip: ([a, b]) => b < a ? [b, a] : [a, b],
 });
 
 export function LinearScaleMap(domains=unit, range=unit) {
     let state = {
+        _unknown: undefined,
         scaleType: 'scaleLinear',
         domains,
         range,
@@ -52,6 +50,7 @@ export function LinearScaleMap(domains=unit, range=unit) {
 
     return init(Object.assign(
         state,
+        utils(state),
         mapper(state),
         domainGetter(state),
         domainSetter(state),

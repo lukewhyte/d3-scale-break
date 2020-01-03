@@ -1,12 +1,9 @@
-import { scaleLinear } from 'd3-scale';
 import { LinearScaleMap as ScaleMap } from './ScaleMap';
+import continuous from './continuous';
 
 const linear = (domains, range) => {
-    const scaleMap = ScaleMap(domains, range);
-    const scales = domains.map(domain => scaleLinear(
-        domain,
-        scaleMap.interpolate(domain),
-    ));
+    const scale = continuous(ScaleMap(domains, range));
+    return scale;
 };
 
 // We'll have a universal scaleMapper that will create an array of domain->ranges with a lookup function
