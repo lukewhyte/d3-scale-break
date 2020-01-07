@@ -1,33 +1,37 @@
-export const scopeSetter = state => {
-    let listeners = [];
-    return {
-        addScopeListener: func => listeners.push(func),
-        removeScopeListener: toRmv => listeners = listeners.filter(func => func !== toRmv),
-        notifyScopeListeners: () => listeners.forEach(func => {
-            state[func] ? state[func]() : state.removeRangeListener(func);
-        }),
-        setScopes: scopes => {
-            if (scopes.length === state.domains.length) {
-                state.scopes = scopes;
-                state.notifyScopeListeners();
-            } else {
-                state.scopes = [];
-                console.error('Scope.length does not match domain.length')
-            }
-            return state.scope;
-        },
-        sanitizeScopes: () => {
-            if (state.scopes.length !== state.domains.length ) {
-                state.scopes = [];
-                console.error('Scope.length does not match domain.length')
-            }
-        },
-    };
-}
+import Listener from './listener-factory';
+
+const _scopes = [];
+
+export const scopeSetter = state => ({
+    listener: new Listener(state),
+    set: scopes => {
+        if (scopes.length === state.domains.getAll().length) {
+            _scopes.splice(0, _scopes.length, ...scopes);
+            state.scopes.listener.notifySubscribers();
+            return _scopes.slice();
+        } else {
+            state.scopes.clear();
+            console.error('scopes.length does not match domains.length')
+        }
+    },
+    clear: () => _scopes.length = 0,
+});
 
 export const scopeGetter = state => ({
-    getScope: idx => {
-        return state.scopes[idx];
+    get: idx => {
+        if (_scopes[idx]) return _scopes[idx];
+        else {
+            const [d0, d1] = state.domains.get(idx);
+            return [state.domains.normalize(d0), state.domains.normalize(d1)];
+        }
     },
-    getScopes: () => state.scopes,
+    getAll: () => _scopes.slice(),
 });
+
+export default state => ({
+    scopes: Object.assign(
+        {},
+        scopeSetter(state),
+        scopeGetter(state),
+    ),
+})

@@ -1,24 +1,29 @@
 import * as scales from 'd3-scale';
 
+let _scales = [];
+
 export const scalesSetter = state => ({
-    addScale: (domain, idx) => {
-        const { scaleType } = state;
-        return scales[scaleType](
-            domain,
-            state.setScaleRange(idx)
-        );
-    },
-    updateScale: (domain, idx) => {
-        return state.getScale(idx).domain(domain).range(
-            state.setScaleRange(idx)
-        );
-    },
-    setScales: () => state.scales = state.domains.map((domain, idx) => {
-        return state.getScale(idx) ? state.updateScale(domain, idx) : state.addScale(domain, idx);
+    add: (domain, idx) => scales[state.scaleType](
+        domain,
+        state.range.getSlice(state.scopes.get(idx)),
+    ),
+    update: (domain, idx) => state.scales.get(idx).domain(domain).range(
+        state.range.getSlice(state.scopes.get(idx)),
+    ),
+    set: () => _scales = state.domains.getAll().map((domain, idx) => {
+        return state.scales.get(idx) ? state.scales.update(domain, idx) : state.scales.add(domain, idx);
     }),
 });
 
-export const scalesGetter = state => ({
-    getScale: idx => state.scales[idx],
-    getScales: () => state.scales,
+export const scalesGetter = () => ({
+    get: idx => _scales[idx],
+    getAll: () => _scales,
 });
+
+export default state => ({
+    scales: Object.assign(
+        {},
+        scalesSetter(state),
+        scalesGetter(),
+    ),
+})

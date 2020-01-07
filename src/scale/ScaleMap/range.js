@@ -1,49 +1,35 @@
 import { interpolate } from "d3-interpolate";
+import Listener from './listener-factory';
 
-const getScope = (idx, state) => {
-    if (state.getScope && state.getScope(idx)) {
-        return state.getScope(idx);
-    } else {
-        const [d0, d1] = state.getDomain(idx);
-        return [state.normalize(d0), state.normalize(d1)];
-    }
-};
+const _range = [0,100];
 
-export const rangeSetter = state => {
-    let listeners = [];
-    return {
-        addRangeListener: func => listeners.push(func),
-        removeRangeListener: toRmv => listeners = listeners.filter(func => func !== toRmv),
-        notifyRangeListeners: () => listeners.forEach(func => {
-            state[func] ? state[func]() : state.removeRangeListener(func);
-        }),
-        setRange: range => {
-            state.range = range;
-            state.notifyRangeListeners();
-            return state.range;
-        },
-        setScaleRange: idx => {
-            try {
-                const [d0, d1] = getScope(idx, state);
-                const [r0, r1] = state.range;
-                return (d1 < d0) ? [
-                    interpolate(r1, r0)(d0),
-                    interpolate(r1, r0)(d1)
-                ] : [
-                    interpolate(r0, r1)(d0),
-                    interpolate(r0, r1)(d1)
-                ];
-            } catch(e) {
-                console.error(
-                    `Your domain breaks could not be interpolated to your range.
-                    Check that the arrays are formatter properly.
-                    Err msg: ${e}`
-                );
-            }
-        },
-    }
-};
+export const rangeSetter = state => ({
+    listener: new Listener(state),
+    set: range => {
+        _range.splice(0, _range.length, ...range);
+        state.range.listener.notifySubscribers();
+        return _range.slice();
+    },
+});
 
 export const rangeGetter = state => ({
-    getRange: () => state.range,
+    get: () => _range.slice(),
+    getSlice: ([s0, s1]) => {
+        const [r0, r1] = state.range.get();
+        return (s1 < s0) ? [
+            interpolate(r1, r0)(s0),
+            interpolate(r1, r0)(s1)
+        ] : [
+            interpolate(r0, r1)(s0),
+            interpolate(r0, r1)(s1)
+        ];
+    }, 
 });
+
+export default state => ({
+    range: Object.assign(
+        {},
+        rangeSetter(state),
+        rangeGetter(state),
+    ),
+})
