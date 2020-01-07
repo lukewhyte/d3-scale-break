@@ -6,7 +6,7 @@ const continuous = scaleMap => {
     }
 
     scale.invert = y => {
-        const scale = scaleMap.getScales().find(scale => {
+        const scale = scaleMap.scales.getAll().find(scale => {
             const [r0, r1] = scaleMap.flip(scale.range());
             return (y >= r0) && (y <= r1);
         });
@@ -14,27 +14,29 @@ const continuous = scaleMap => {
     };
 
     scale.domain = function(_) {
-        return arguments.length ? (scaleMap.setDomains(_), scale) : scaleMap.getDomains().slice();
+        return arguments.length ? (scaleMap.domains.set(_), scale) : scaleMap.domains.getAll();
     };
 
     scale.range = function(_) {
-        return arguments.length ? (scaleMap.setRange(_), scale) : scaleMap.getRange().slice();
+        return arguments.length ? (scaleMap.range.set(_), scale) : scaleMap.range.get();
     };
 
     scale.scope = function(_) {
-        return arguments.length ? (scaleMap.setScopes(_), scale) : scaleMap.getScopes().slice();
+        return arguments.length ? (scaleMap.scopes.set(_), scale) : scaleMap.scopes.getAll();
     };
 
     scale.rangeRound = function(_) {
-        return scaleMap.setRange(_), scale.interpolate(interpolateRound), scale;
+        return scaleMap.range.set(_), scale.interpolate(interpolateRound), scale;
     }
 
     scale.clamp = function(_) {
-        return arguments.length ? (scaleMap.getScales().forEach(scale => scale.clamp(_)), scale) : scaleMap.getScale(0).clamp();
+        return arguments.length ? (scaleMap.scales.getAll().forEach(scale => scale.clamp(_)), scale) : scaleMap.scales.get(0).clamp();
     };
 
     scale.interpolate = function(_) {
-        return arguments.length ? (scaleMap.getScales().forEach(scale => scale.interpolate(_)), scale) : scaleMap.getScale(0).interpolate();
+        return arguments.length 
+            ? (scaleMap.scales.getAll().forEach(scale => scale.interpolate(_)), scale)
+            : scaleMap.scales.get(0).interpolate();
     };
 
     scale.unknown = function(_) {
