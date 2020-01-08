@@ -1,8 +1,12 @@
+import fs from 'fs';
+import path from 'path';
 import test from 'tape';
 import * as d3 from 'd3';
 import jsdom from 'jsdom';
 import { axisLeft, axisRight } from './index';
 import linear from '../scale/linear';
+
+const file = file => fs.readFileSync(path.join(__dirname, file), "utf8").replace(/\n\s*/mg, "");
 
 test('axis.scales sets the scale or returns it', t => {
     const scale = linear([ [0,50], [50,100] ], [0,1000]);
@@ -45,15 +49,14 @@ test('axis.tickValues sets and retrieves tick values', t => {
     t.end();
 });
 
-// test('axis draws the expected elements', t => {
-//     const scale = linear([ [0,50], [50,100], [100, 150] ], [0,1000]);
-//     const axis = axisLeft(scale);
+test('axis draws the expected elements', t => {
+    const scale = linear([ [0,50], [50,100], [100, 150] ], [0,500]);
+    const axis = axisLeft(scale);
 
-//     const body = (new jsdom.JSDOM("<!DOCTYPE html><svg><g></g></svg>")).window.document.body;
-
-//     let result = d3.select(body).select('g').call(axis);
-//     let expected = [[1, 2, 3], [1, 2, 3], [1, 2, 3]];
-//     t.deepEqual(result, expected);
+    const result = (new jsdom.JSDOM('<!DOCTYPE html><svg><g></g></svg>')).window.document.body;
+    const expected = (new jsdom.JSDOM(file('./mocks/axis-left.html'))).window.document.body;
+    d3.select(result).select('g').call(axis);
+    t.equal(result.outerHTML, expected.outerHTML);
     
-//     t.end();
-// });
+    t.end();
+});
