@@ -1,9 +1,10 @@
 import test from 'tape';
 import { interpolateRgb } from 'd3-interpolate';
-import linear from './linear';
+import { LinearScaleMap as ScaleMap } from '../ScaleMap';
+import continuous from './index';
 
 test('continuous.domain should set the domain or return it', t => {
-    const scale = linear([[0,50], [50, 100]], [0,1000]);
+    const scale = continuous(ScaleMap([[0,50], [50, 100]], [0,1000]));
     let result = scale.domain();
     let expected = [[0,50], [50, 100]]
     t.deepEqual(result, expected);
@@ -16,7 +17,7 @@ test('continuous.domain should set the domain or return it', t => {
 });
 
 test('continuous.range should set the range or return it', t => {
-    const scale = linear([[0,50], [50, 100]], [0,1000]);
+    const scale = continuous(ScaleMap([[0,50], [50, 100]], [0,1000]));
 
     let result = scale.range();
     let expected = [0, 1000]
@@ -30,21 +31,17 @@ test('continuous.range should set the range or return it', t => {
 });
 
 test('continuous.scope should set the scope or return it', t => {
-    const scale = linear([[0,50], [50, 100]], [0,1000]);
+    const scale = continuous(ScaleMap([[0,50], [50, 100]], [0,1000]));
 
     let result = scale.scope([[0,0.25],  [0.25, 1]]).scope();
     let expected = [[0,0.25],  [0.25, 1]]
-    t.deepEqual(result, expected);
-
-    result = scale.scope([[0,1]]).scope();
-    expected = [];
     t.deepEqual(result, expected);
 
     t.end();
 });
 
 test('continuous should return the correct value', t => {
-    const scale = linear([[-1000, -500], [-500, 0], [0, 500], [500, 1000]], [0,100]);
+    const scale = continuous(ScaleMap([[-1000, -500], [-500, 0], [0, 500], [500, 1000]], [0,100]));
 
     let result = scale(500);
     let expected = 75;
@@ -69,7 +66,7 @@ test('continuous should return the correct value', t => {
 });
 
 test('continuous.invert inverts the range val', t => {
-    const scale = linear([[-40, 90], [90, 800], [800, 3960]], [0,100]);
+    const scale = continuous(ScaleMap([[-40, 90], [90, 800], [800, 3960]], [0,100]));
     
     let result = scale.invert(100);
     let expected = 3960;
@@ -88,7 +85,7 @@ test('continuous.invert inverts the range val', t => {
 });
 
 test('continous.interpolate should set interpolator', t => {
-    const scale = linear([[-40, 90], [90, 800], [800, 3960]], ['black', 'white']);
+    const scale = continuous(ScaleMap([[-40, 90], [90, 800], [800, 3960]], ['black', 'white']));
     scale.interpolate(interpolateRgb);
     
     const result = scale(95.88886653);
@@ -99,7 +96,7 @@ test('continous.interpolate should set interpolator', t => {
 });
 
 test('continous.rangeRound should set range and interpolateRound', t => {
-    const scale = linear([[-40, 90], [90, 800], [800, 3960]]);
+    const scale = continuous(ScaleMap([[-40, 90], [90, 800], [800, 3960]]));
     scale.rangeRound([0, 100]);
     
     const result = scale(95.88886653);
@@ -110,7 +107,7 @@ test('continous.rangeRound should set range and interpolateRound', t => {
 });
 
 test('continuous.unknown should return undefined or the unknown() value', t => {
-    const scale = linear([[50,0],[0,-50]], [0,1000]);
+    const scale = continuous(ScaleMap([[50,0],[0,-50]], [0,1000]));
     
     let result = scale.unknown()
     let expected = undefined;
@@ -130,7 +127,7 @@ test('continuous.unknown should return undefined or the unknown() value', t => {
 });
 
 test('continuous.clamp should clamp the range/domain, but gaps in domains should return unknown()', t => {
-    const scale = linear([[50,0],[-25,-50]], [0,1000]);
+    const scale = continuous(ScaleMap([[50,0],[-25,-50]], [0,1000]));
     scale.clamp(false);
     scale.unknown('Par for the course, ol chap');
     
@@ -153,3 +150,19 @@ test('continuous.clamp should clamp the range/domain, but gaps in domains should
 
     t.end();
 });
+
+test('continuous.eachScale returns the inner scales', t => {
+    const scales = continuous(ScaleMap([[50,0],[-25,-50]], [0,1000]));
+    let result;
+
+    scales.eachScale((scale, idx) => {
+        if (idx === 1) {
+            result = scale.domain();
+        }
+    });
+
+    let expected = [-25,-50];
+    t.deepEqual(result, expected);
+
+    t.end();
+})

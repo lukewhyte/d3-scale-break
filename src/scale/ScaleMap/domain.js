@@ -21,7 +21,7 @@ const checkScopes = (state, domains) => {
     const scopes = state.scopes.getAll();
     if (scopes.length && scopes.length !== domains.length) {
         state.scopes.clear();
-        console.error('scopes.length does not match domains.length');
+        console.error('domains: scopes.length does not match domains.length');
     }
 };
 

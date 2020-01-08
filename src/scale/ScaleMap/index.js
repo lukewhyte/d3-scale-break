@@ -12,7 +12,7 @@ export const utils = state => ({
     flip: ([a, b]) => b < a ? [b, a] : [a, b],
 });
 
-export function LinearScaleMap(initDomains=unit, initRange=unit) {
+export function LinearScaleMap(initDomains=[unit], initRange=unit) {
     let state = {
         scaleType: 'scaleLinear',
     };

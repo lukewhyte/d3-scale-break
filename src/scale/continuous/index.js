@@ -1,5 +1,14 @@
 import { interpolateRound } from "d3-interpolate";
 
+export function copy(source, target) {
+    return target
+        .domain(source.domain())
+        .range(source.range())
+        .interpolate(source.interpolate())
+        .clamp(source.clamp())
+        .unknown(source.unknown());
+}
+
 const continuous = scaleMap => {
     function scale (x) {
         return isNaN(x = +x) ? scaleMap.unknown : scaleMap.mapVal(x);
@@ -41,6 +50,18 @@ const continuous = scaleMap => {
 
     scale.unknown = function(_) {
         return arguments.length ? (scaleMap.unknown = _, scale) : scaleMap.unknown;
+    };
+
+    scale.eachScale = cb => {
+        const scales = scaleMap.scales.getAll();
+        for (let i = 0; i < scales.length; i++) {
+            cb(scales[i], i);
+        }
+        return scale;
+    }
+
+    scale.mapScales = cb => {
+        return scaleMap.scales.getAll().map(cb);
     };
     
     return scale;

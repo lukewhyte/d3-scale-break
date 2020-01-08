@@ -11,7 +11,7 @@ export const scopeSetter = state => ({
             return _scopes.slice();
         } else {
             state.scopes.clear();
-            console.error('scopes.length does not match domains.length')
+            console.error('scopes: scopes.length does not match domains.length')
         }
     },
     clear: () => _scopes.length = 0,
