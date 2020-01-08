@@ -15,7 +15,7 @@ test('linear.ticks sets ticks in correct format', t => {
     t.end();
 });
 
-test('linear.ticks sets ticks in correct format', t => {
+test('linear.tickFormat sets tick format', t => {
     const scale = linear([[0,0.5],[0.5,1]], [0,1000]);
     const ticks = scale.ticks(5);
     const tickFormat = scale.tickFormat(5, "+%")

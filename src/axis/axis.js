@@ -14,7 +14,7 @@ const setAxis = axes => {
         axes.forEach(axis => context.append('g').call(axis));
     }
 
-    function scale(args) {
+    function scale() {
         return axes.map(axis => axis.scale());
     }
 
