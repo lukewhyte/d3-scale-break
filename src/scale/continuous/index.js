@@ -52,14 +52,6 @@ const continuous = scaleMap => {
         return arguments.length ? (scaleMap.unknown = _, scale) : scaleMap.unknown;
     };
 
-    scale.eachScale = cb => {
-        const scales = scaleMap.scales.getAll();
-        for (let i = 0; i < scales.length; i++) {
-            cb(scales[i], i);
-        }
-        return scale;
-    }
-
     scale.mapScales = cb => {
         return scaleMap.scales.getAll().map(cb);
     };

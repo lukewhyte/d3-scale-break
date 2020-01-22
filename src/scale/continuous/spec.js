@@ -151,18 +151,10 @@ test('continuous.clamp should clamp the range/domain, but gaps in domains should
     t.end();
 });
 
-test('continuous.eachScale returns the inner scales', t => {
+test('continuous.mapScales returns the inner scales', t => {
     const scales = continuous(ScaleMap([[50,0],[-25,-50]], [0,1000]));
-    let result;
-
-    scales.eachScale((scale, idx) => {
-        if (idx === 1) {
-            result = scale.domain();
-        }
-    });
-
-    let expected = [-25,-50];
+    const result = scales.mapScales(scale => scale.domain())[1];
+    const expected = [-25,-50];
     t.deepEqual(result, expected);
-
     t.end();
 })

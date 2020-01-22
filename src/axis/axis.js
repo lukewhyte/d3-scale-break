@@ -11,7 +11,10 @@ const setAxis = axes => {
     }
 
     function dispatch(context) {
-        axes.forEach(axis => context.append('g').call(axis));
+        axes.forEach((axis, idx) => context
+            .append('g')
+            .attr('class', `axis-${idx}`)
+            .call(axis));
     }
 
     function scale() {

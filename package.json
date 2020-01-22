@@ -1,6 +1,6 @@
 {
   "name": "d3-scale-break",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Domain/range scale breaking for handling data outliers in d3",
   "main": "dist/d3-scale-break.min.js",
   "module": "dist/d3-scale-break.esm.js",
@@ -54,6 +54,7 @@
     "tape": "^4.12.1"
   },
   "dependencies": {
+    "d3-array": "^2.4.0",
     "d3-axis": "^1.0.12",
     "d3-interpolate": "^1.4.0",
     "d3-scale": "^3.2.1"
