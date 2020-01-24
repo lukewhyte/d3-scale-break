@@ -1,8 +1,8 @@
 {
   "name": "d3-scale-break",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Domain/range scale breaking for handling highly skewed data in d3",
-  "main": "dist/d3-scale-break.node.js",
+  "main": "dist/d3-scale-break.min.js",
   "module": "dist/d3-scale-break.esm.js",
   "unpkg": "dist/d3-scale-break.min.js",
   "jsdelivr": "dist/d3-scale-break.min.js",
