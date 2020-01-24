@@ -1,8 +1,8 @@
 import Listener from './listener-factory';
 
-const getNewScopes = () => [];
+const _scopes = [];
 
-export const scopeSetter = (state, _scopes) => ({
+export const scopeSetter = state => ({
     listener: new Listener(state),
     set: scopes => {
         if (scopes.length === state.domains.getAll().length) {
@@ -17,7 +17,7 @@ export const scopeSetter = (state, _scopes) => ({
     clear: () => _scopes.length = 0,
 });
 
-export const scopeGetter = (state, _scopes) => ({
+export const scopeGetter = state => ({
     get: idx => {
         if (_scopes[idx]) return _scopes[idx];
         else {
@@ -28,13 +28,10 @@ export const scopeGetter = (state, _scopes) => ({
     getAll: () => _scopes.slice(),
 });
 
-export default state => {
-    const _scopes = getNewScopes();
-    return {
-        scopes: Object.assign(
-            {},
-            scopeSetter(state, _scopes),
-            scopeGetter(state, _scopes),
-        ),
-    };
-};
+export default state => ({
+    scopes: Object.assign(
+        {},
+        scopeSetter(state),
+        scopeGetter(state),
+    ),
+})

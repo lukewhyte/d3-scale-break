@@ -1,8 +1,10 @@
 import * as scales from 'd3-scale';
+import Listener from './listener-factory';
 
-const getNewScales = () => [];
+let _scales = [];
 
-export const scalesSetter = (state, _scales) => ({
+export const scalesSetter = state => ({
+    listener: new Listener(state),
     add: (domain, idx) => scales[state.scaleType](
         domain,
         state.range.getSlice(state.scopes.get(idx)),
@@ -11,25 +13,22 @@ export const scalesSetter = (state, _scales) => ({
         state.range.getSlice(state.scopes.get(idx)),
     ),
     set: () => {
-        const scales = state.domains.getAll().map((domain, idx) => {
+        _scales = state.domains.getAll().map((domain, idx) => {
             return state.scales.get(idx) ? state.scales.update(domain, idx) : state.scales.add(domain, idx);
         });
-        return _scales.splice(0, scales.length, ...scales);
+        state.scales.listener.notifySubscribers();
     },
 });
 
-export const scalesGetter = (state, _scales) => ({
+export const scalesGetter = () => ({
     get: idx => _scales[idx],
     getAll: () => _scales,
 });
 
-export default state => {
-    const _scales = getNewScales();
-    return {
-        scales: Object.assign(
-            {},
-            scalesSetter(state, _scales),
-            scalesGetter(state, _scales),
-        ),
-    };
-};
+export default state => ({
+    scales: Object.assign(
+        {},
+        scalesSetter(state),
+        scalesGetter(),
+    ),
+})

@@ -1,9 +1,9 @@
 import { interpolate } from "d3-interpolate";
 import Listener from './listener-factory';
 
-const getNewRange = () => [0,100];
+const _range = [0,100];
 
-export const rangeSetter = (state, _range) => ({
+export const rangeSetter = state => ({
     listener: new Listener(state),
     set: range => {
         _range.splice(0, _range.length, ...range);
@@ -12,7 +12,7 @@ export const rangeSetter = (state, _range) => ({
     },
 });
 
-export const rangeGetter = (state, _range) => ({
+export const rangeGetter = state => ({
     get: () => _range.slice(),
     getSlice: ([s0, s1]) => {
         const [r0, r1] = state.range.get();
@@ -26,13 +26,10 @@ export const rangeGetter = (state, _range) => ({
     }, 
 });
 
-export default state => {
-    const _range = getNewRange();
-    return {
-        range: Object.assign(
-            {},
-            rangeSetter(state, _range),
-            rangeGetter(state, _range),
-        ),
-    };
-};
+export default state => ({
+    range: Object.assign(
+        {},
+        rangeSetter(state),
+        rangeGetter(state),
+    ),
+})

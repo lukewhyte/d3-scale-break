@@ -30,10 +30,10 @@ test('axis.tickArguments sets and retrieves tick arguments', t => {
 });
 
 test('axis.ticks sets tickArguments', t => {
-    const axis = axisRight(linear([ [0,50], [50,100] ], [0,1000])).ticks([5,10]);
+    const axis = axisRight(linear([ [0,50], [50,100] ], [0,1000])).ticks(5, 's');
 
     let result = axis.tickArguments();
-    let expected = [[5],[10]];
+    let expected = [ [ 5, 's' ], [ 5, 's' ] ];
     t.deepEqual(result, expected);
     
     t.end();

@@ -1,12 +1,12 @@
 import Listener from './listener-factory';
 
-const getNewDomains = () => [[0,1]];
+const _domains = [[0,1]];
 
 const d3Normalize = (a, b) => (b -= (a = +a)) 
     ? (x => isNaN(x = +x) ? undefined : (x - a) / b)
     : (isNaN(b) ? NaN : 0.5);
 
-const setNormalizer = _domains => {
+const setNormalizer = () => {
     try {
         const len = _domains.length;
         const d0 = _domains[0][0];
@@ -25,19 +25,19 @@ const checkScopes = (state, domains) => {
     }
 };
 
-export const domainSetter = (state, _domains) => ({
+export const domainSetter = state => ({
     listener: new Listener(state),
-    normalize: setNormalizer(_domains),
+    normalize: setNormalizer(),
     set: domains => {
         checkScopes(state, domains);
         _domains.splice(0, _domains.length, ...domains);
-        state.domains.normalize = setNormalizer(_domains);
+        state.domains.normalize = setNormalizer();
         state.domains.listener.notifySubscribers();
         return _domains.slice();
     },
 });
 
-export const domainGetter = (state, _domains) => ({
+export const domainGetter = () => ({
     get: idx => _domains[idx],
     getAll: () => _domains.slice(),
     getExtent: () => {
@@ -49,13 +49,10 @@ export const domainGetter = (state, _domains) => ({
     },
 });
 
-export default state => {
-    const _domains = getNewDomains();
-    return {
-        domains: Object.assign(
-            {},
-            domainSetter(state, _domains),
-            domainGetter(state, _domains),
-        ),
-    };
-};
+export default state => ({
+    domains: Object.assign(
+        {},
+        domainSetter(state),
+        domainGetter(state),
+    ),
+});

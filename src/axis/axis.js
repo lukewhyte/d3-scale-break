@@ -21,8 +21,8 @@ const setAxis = axes => {
         return axes.map(axis => axis.scale());
     }
 
-    function ticks(args) {
-        return axes.forEach((axis, idx) => axis.ticks(args[idx])), dispatch;
+    function ticks(args1, args2) {
+        return axes.forEach((axis, idx) => axis.ticks(args1[idx], args2[idx])), dispatch;
     }
 
     return Object.assign(dispatch, {

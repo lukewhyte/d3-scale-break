@@ -1,9 +1,9 @@
 import * as scale from './scale';
 import * as axis from './axis';
-import breakDomain from './breakDomain';
+import * as breakers from './breakers';
 
 export default {
     ...scale,
     ...axis,
-    breakDomain,
+    ...breakers,
 };

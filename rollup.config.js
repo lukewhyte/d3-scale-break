@@ -12,7 +12,7 @@ function onwarn(message, warn) {
 
 const baseConfig = {
     input: 'src/index.js',
-    external: Object.keys(meta.dependencies || {}).filter(key => /^d3-/.test(key)),
+    external: Object.keys(meta.dependencies),
 };
 
 const outputConfig = {
@@ -42,18 +42,11 @@ export default [Object.assign({}, baseConfig, {
     onwarn,
 }), Object.assign({}, baseConfig, {
     output: Object.assign({}, outputConfig, {
-        file: `dist/${meta.name}.node.js`,
-        format: 'cjs',
-    }),
-    plugins: pluginsConfig({ node: '6' }),
-    onwarn,
-}), Object.assign({}, baseConfig, {
-    output: Object.assign({}, outputConfig, {
         extend: true,
         file: `dist/${meta.name}.min.js`,
         format: 'umd',
         indent: false,
-        globals: Object.assign({}, ...Object.keys(meta.dependencies || {}).filter(key => /^d3-/.test(key)).map(key => ({[key]: "d3"}))),
+        globals: Object.assign({}, ...Object.keys(meta.dependencies).map(key => ({[key]: key}))),
     }),
     plugins: pluginsConfig({ node: '6' }),
     onwarn,
