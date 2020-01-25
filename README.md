@@ -21,7 +21,7 @@ d3sB.scaleLinear()
     .range([0, 100]);
 ```
 
-The `.scope` method denotes the percentage of the range that each subscale should occupy – in the above example it;s 50% for each domain. You can denote gaps in the range with scope too, eg: `.scope([ [0, 0.2], [0.5, 1] ])`.
+The `.scope` method denotes the percentage of the range that each subscale should occupy – in the above example it's 50% for each domain. You can denote gaps in the range with scope too, eg: `.scope([ [0, 0.2], [0.5, 1] ])`.
 
 The plugin wraps `d3-scale` and `d3-axis` and provides all the same methods and functionality (with a couple caveats [explained below](#exceptions)).
 
@@ -136,6 +136,17 @@ const breakpoints = [-100, 100];
 
 const scope = d3sB.breakScope(data, breakpoints)
 // [ [0, 0.43], [0.43, 0.86], [0.86, 1] ]
+```
+
+<a name="breakdata" href="#breakdata">#</a> <i>d3sB</i>.<b>breakData</b>(<i>data, breakpoints</i>)
+
+This is simply a wrapper method for `breakDomain` and `breakScope` that returns them both in the format:
+
+```js
+{
+    breakDomain: Array<Array>,
+    breakScope: Array<Array>
+}
 ```
 
 Again, check out examples of how to use `d3-scale-break` [here](https://observablehq.com/@lukewhyte/handling-skewed-data-with-d3-scale-break).
