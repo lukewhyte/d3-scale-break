@@ -144,8 +144,8 @@ This is simply a wrapper method for `breakDomain` and `breakScope` that returns 
 
 ```js
 {
-    breakDomain: Array<Array>,
-    breakScope: Array<Array>
+    domain: Array<Array>,
+    scope: Array<Array>
 }
 ```
 
