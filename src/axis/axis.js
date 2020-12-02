@@ -11,6 +11,7 @@ const setAxis = axes => {
     }
 
     function dispatch(context) {
+        context.selectAll('g').remove()
         axes.forEach((axis, idx) => context
             .append('g')
             .attr('class', `axis-${idx}`)
@@ -36,21 +37,21 @@ const setAxis = axes => {
         tickSizeOuter: arg => updateOrReturn('tickSizeOuter', parseArg(arg, axes.length)),
         tickPadding: arg => updateOrReturn('tickPadding', parseArg(arg, axes.length)),
     });
-    
+
 };
 
 export function axisTop(scales) {
     return setAxis(scales.mapScales(scale => d3Axis.axisTop(scale)));
 }
-  
+
 export function axisRight(scales) {
     return setAxis(scales.mapScales(scale => d3Axis.axisRight(scale)));
 }
-  
+
 export function axisBottom(scales) {
     return setAxis(scales.mapScales(scale => d3Axis.axisBottom(scale)));
 }
-  
+
 export function axisLeft(scales) {
     return setAxis(scales.mapScales(scale => d3Axis.axisLeft(scale)));
 }
